@@ -1,11 +1,131 @@
 # Claims Review Agent — Reference Implementation
 
 A local reference implementation of the claims workflow, grounding and validation logic
-in `docs/design_report.md` Part 1 (evaluation plan in `docs/evaluation.md`). The production
+in the [design report](docs/design_report.md) ([PDF](docs/design_report.pdf)), Part 1, with
+an [evaluation plan](docs/evaluation.md). The production
 architecture in Part 2 (claims-platform integration, BAA-covered inference, shadow mode) is
 designed, not implemented. Run against sample claim data and three **synthetic**
 per-insurer policy documents (only one real example policy PDF was provided; see
 `agent/policies_source/`).
+
+## Design
+
+Full rationale, trade-offs and assumptions: **[Design report](docs/design_report.md)**.
+
+### Claim workflow
+
+Deterministic gates resolve a claim first; the LLM runs only when none fire, and its output
+is grounding-checked before anything executes ([§1.1](docs/design_report.md#11-claims-and-policies)).
+
+```mermaid
+flowchart TD
+  START(["Claim event"]) --> OV{"deterministic overrides"}
+  OV -->|"inactive"| DENY["deny"]
+  OV -->|"exactly one: amount / mismatch / missing docs"| SINGLE{"which one?"}
+  OV -->|"2+ together"| MULTI["route to senior reviewer<br/>(collision)"]
+  SINGLE -->|"amount"| SENIOR["route to senior reviewer"]
+  SINGLE -->|"mismatch"| CODE["route to coding review"]
+  SINGLE -->|"missing docs"| DOCS["request documentation"]
+  OV -->|"none"| RET["retrieve policy evidence"]
+  RET --> TYPE{"claim_type?"}
+  TYPE -->|"preapproval"| PA["preapproval workflow"]
+  TYPE -->|"standard"| STANDARD["standard workflow"]
+  TYPE -->|"appeal"| APPEAL["appeal workflow"]
+  PA --> LLM["llm_decision"]
+  STANDARD --> LLM
+  APPEAL --> LLM
+  LLM --> GC{"grounding check"}
+  GC -->|"ungrounded: retry"| LLM2["retry"]
+  GC -->|"clean"| VAL["validate"]
+  LLM2 --> GC2{"still ungrounded?"}
+  GC2 -->|"yes"| GFAIL["route to senior reviewer<br/>(discarded)"]
+  GC2 -->|"no"| VAL
+
+  GATE{"autonomy gate"}
+  DENY --> GATE
+  CODE --> GATE
+  DOCS --> GATE
+  SENIOR --> GATE
+  MULTI --> GATE
+  VAL --> GATE
+  GFAIL --> GATE
+  GATE -->|"cleared"| AUTO["auto-execute"]
+  GATE -->|"not cleared"| HUMANR["human review"]
+  AUTO --> OUT["write-back + audit"]
+  HUMANR --> OUT
+```
+
+### Production architecture
+
+Designed, not implemented in this repo ([Part 2](docs/design_report.md#part-2-storage-and-system-design)).
+
+```mermaid
+flowchart TB
+  subgraph PHI["PHI / BAA-covered boundary"]
+    CAP["Claims Administration Platform"]
+    CDC["CDC to Kafka<br/>claim-events topic"]
+    PGR[("Postgres read replica (claims)<br/>materialized view, never the write path")]
+    AGENT["Worker pool to LangGraph agent<br/>one invocation per claim event<br/>deterministic gates, retrieval, one LLM call, validation"]
+    WB["Write-back to Claims Platform<br/>via that platform's own API"]
+    AUDIT[("Tamper-evident audit log<br/>retention matched to state record rules")]
+    HUMANUI["Reviewer UI, human<br/>reads platform + audit log"]
+    CAP -->|"claim create / update"| CDC
+    CDC -->|"stream"| PGR
+    PGR --> AGENT
+    AGENT --> WB
+    AGENT --> AUDIT
+    AGENT --> HUMANUI
+  end
+
+  subgraph POLICY["Policy ingestion, outside PHI scope"]
+    DOC["Policy Document Management<br/>SPDs / EOCs, versioned by effective date"]
+    CHUNK["Chunk by section heading<br/>structural, not fixed-size or semantic"]
+    INDEX["Embed + index<br/>hybrid: vector + BM25"]
+    DOC -->|"on publish"| CHUNK --> INDEX
+  end
+  VEC[("Vector + keyword index<br/>filtered: insurer + plan + effective date")]
+  INDEX --> VEC
+  VEC -->|"hybrid search"| AGENT
+
+  CAND["Shadow candidate<br/>new prompt/model version<br/>logged only, never executed"]
+  AGENT -.mirror traffic.-> CAND
+  CAND -.promote / roll back, per action type.-> AGENT
+```
+
+### Evaluation loop
+
+Every change runs against the golden set in CI; disagreements become new regression rows
+([§3.2](docs/design_report.md#32-metrics-and-evaluation-harness)).
+
+```mermaid
+flowchart TD
+  CHANGE["Code, prompt, or model change"] --> CI["CI runs eval.harness<br/>against golden_set.json"]
+  CI --> GATE{"Any regression?<br/>any override-path miss?"}
+  GATE -->|yes| BLOCK["Block merge<br/>override miss is zero-tolerance, always blocks"]
+  GATE -->|no| DEPLOY["Merge, deploy as shadow candidate"]
+  DEPLOY --> SHADOW["Shadow mode vs. live traffic"]
+  SHADOW --> PROMOTE["Promoted, per action type"]
+  SHADOW --> DISAGREE["Disagreement or held candidate"]
+  DISAGREE --> NEWROW["New golden_set.json row<br/>permanent regression guard"]
+  NEWROW --> CI
+```
+
+### Shadow-mode promotion
+
+A candidate prompt/model is logged alongside live traffic and promoted per action type
+([§2.3](docs/design_report.md#23-shadow-mode)).
+
+```mermaid
+flowchart TB
+  EVT["Live claim event"] --> CUR["Currently-deployed agent"]
+  EVT --> CAND["Candidate agent (new prompt/model)"]
+  CUR --> EXEC["Executes, writes back"]
+  CAND --> LOG["Logged only, never executed"]
+  LOG --> SAMPLE["Sampled vs. human/SME outcome"]
+  SAMPLE --> AGREE{"Agreement clears bar?"}
+  AGREE -->|no| HOLD["Hold candidate, feed into failure analysis"]
+  AGREE -->|yes, sustained| PROMOTE["Promote, per action type"]
+```
 
 ## Stack
 
