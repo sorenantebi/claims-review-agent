@@ -1,0 +1,89 @@
+SYNTHETIC EXAMPLE POLICY -- NOT A REAL INSURER DOCUMENT
+Generated for the claims-review-agent demo, adapted from the HorizonCare Silver PPO
+sample structure. Do not use for real coverage determinations.
+
+Plan Name: BCBS PPO Plus 2025
+Effective Date: January 1, 2025
+Document Version: v1.0
+Applies To: In-network and out-of-network benefits unless otherwise stated.
+
+1 Overview of Covered Benefits
+This Policy provides coverage for Medically Necessary services that are not otherwise
+excluded. Covered Benefits include, but are not limited to:
+- Physician office visits and specialist consultations
+- Laboratory and diagnostic testing
+- Specialty and biologic drug therapy (Formulary-based, subject to Prior Authorization)
+- Emergency services
+
+2 Member Eligibility and Plan Status
+Benefits are payable only if the member is enrolled and the Plan is active on the date
+of service. If the member's Plan is inactive at the time services are rendered, the
+claim will be denied. Denial reason: "Plan inactive at time of service."
+
+3 Prior Authorization (Pre-Approval)
+3.1 Services Requiring Prior Authorization
+The following services require Prior Authorization:
+- Specialty drugs listed as "PA Required" on the Formulary, including biologic
+  injections for severe asthma
+- Elective inpatient admissions
+- CT and MRI scans (except emergency)
+- Durable medical equipment (DME) exceeding $500
+
+3.2 Documentation Required
+Prior Authorization requests must include: (1) ordering provider's clinical note,
+(2) relevant diagnosis code(s), (3) prior treatment history (if applicable), and
+(4) expected service date and location. If documentation is missing, the request will
+be pended until complete information is received -- no approval or denial can be
+issued until it is.
+
+4 Medical Necessity Standard
+A service is considered Medically Necessary if it is consistent with generally accepted
+standards of medical practice, clinically appropriate in type, frequency, and setting,
+not primarily for convenience of the member or provider, and the most cost-effective
+option among clinically comparable alternatives.
+
+5 Coverage for Specialty and Biologic Drug Therapy
+5.1 Biologic Injection Coverage (Asthma)
+A biologic injection for asthma is covered when all of the following are met:
+- Diagnosis of severe persistent asthma (e.g., J45.40 or related codes); and
+- Documented inadequate control on standard inhaled corticosteroid therapy; and
+- Prior Authorization has been approved, supported by a clinical note.
+Prior Authorization requests missing the ordering provider's clinical note cannot be
+evaluated for medical necessity and must be pended for documentation.
+
+5.2 Preventive and Screening Services
+Routine screening laboratory panels (e.g., a lipid panel performed without symptoms or
+a qualifying diagnosis) are classified as preventive screening and are excluded from
+standard coverage under this plan. Denials for services classified as preventive
+screening may only be overturned on appeal if new clinical documentation is submitted
+establishing a qualifying diagnosis or symptomatic indication; an appeal letter alone,
+without new clinical documentation, does not meet this bar and the original denial
+should be upheld.
+
+6 Exclusions
+The Plan does not cover: cosmetic or reconstructive procedures not required by trauma
+or congenital anomaly; services deemed not Medically Necessary; experimental or
+investigational treatments; services for which required Prior Authorization was not
+obtained; routine preventive screening as described in 5.2; duplicate claims for the
+same service date and provider unless corrected and resubmitted.
+
+7 Claims Processing Rules
+7.1 Duplicate Claims
+A claim is considered duplicate if Member ID, Provider NPI, Date of service, CPT /
+procedure code, and billed amount all match. Duplicate claims are denied with reason:
+"Duplicate claim submission."
+
+7.2 Coding Consistency
+Claims are routed for coding review if the diagnosis and procedure codes are clinically
+inconsistent based on standard coding guidelines. Such claims must not be approved
+until coding review is complete.
+
+8 Appeals
+Members and providers have the right to appeal a denial within 180 days. Appeals must
+include a written appeal request, the denial letter or claim reference number, and any
+new clinical documentation relevant to the denial reason. Appeals without new or
+relevant clinical documentation may be upheld.
+
+9 Contact Information
+For questions about benefits, Prior Authorization, or claim status, contact BCBS Member
+Support at 1-800-555-0133 or via the Member Portal.

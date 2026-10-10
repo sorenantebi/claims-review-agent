@@ -1,0 +1,77 @@
+SYNTHETIC EXAMPLE POLICY -- NOT A REAL INSURER DOCUMENT
+Generated for the claims-review-agent demo, adapted from the HorizonCare Silver PPO
+sample structure. Do not use for real coverage determinations.
+Plan Name: Aetna Select POS 2025
+Effective Date: January 1, 2025
+Document Version: v1.0
+Applies To: In-network and out-of-network benefits unless otherwise stated.
+1 Overview of Covered Benefits
+This Policy provides coverage for Medically Necessary services that are not otherwise
+excluded. Covered Benefits include, but are not limited to:
+- Physician office visits and specialist consultations, including chronic-condition
+  follow-up visits
+- Outpatient behavioral health services, including individual psychotherapy
+- Inpatient and outpatient orthopedic surgical procedures
+- Emergency services
+- Prescription drugs (Formulary-based)
+2 Member Eligibility and Plan Status
+Benefits are payable only if the member is enrolled and the Plan is active on the date
+of service. If the member's Plan is inactive at the time services are rendered, the
+claim will be denied. Denial reason: "Plan inactive at time of service."
+3 Prior Authorization (Pre-Approval)
+3.1 Services Requiring Prior Authorization
+The following services require Prior Authorization:
+- Elective inpatient admissions
+- Non-emergency orthopedic surgery
+- Durable medical equipment (DME) exceeding $500
+Prior Authorization is NOT required for orthopedic surgery performed to treat an acute
+traumatic fracture in an urgent or emergency setting.
+3.2 Documentation Required
+Prior Authorization requests must include: (1) ordering provider's clinical note,
+(2) relevant diagnosis code(s), (3) prior treatment history (if applicable), and
+(4) expected service date and location. If documentation is missing, the request will
+be pended until complete information is received.
+4 Medical Necessity Standard
+A service is considered Medically Necessary if it is consistent with generally accepted
+standards of medical practice, clinically appropriate in type, frequency, and setting,
+not primarily for convenience of the member or provider, and the most cost-effective
+option among clinically comparable alternatives.
+5 Coverage for Behavioral Health Services
+5.1 Psychotherapy Coverage
+Outpatient individual psychotherapy is covered when medical necessity is documented,
+specifically: a qualifying behavioral health diagnosis, a treatment plan or clinical
+note describing symptoms and functional impairment, and a stated treatment frequency.
+A denial for "insufficient documentation of medical necessity" may be overturned on
+appeal if new documentation (e.g., a clinical note with a diagnosis, symptom
+description, and treatment plan) is submitted that addresses the original
+insufficiency.
+5.2 Orthopedic Surgical Coverage
+Surgical treatment of a diagnosed fracture (e.g., hip fracture) is covered without
+Prior Authorization when performed in an urgent/emergency setting and supported by an
+
+operative note and discharge summary.
+6 Exclusions
+The Plan does not cover: cosmetic or reconstructive procedures not required by trauma
+or congenital anomaly; services deemed not Medically Necessary; experimental or
+investigational treatments; services for which required Prior Authorization was not
+obtained; duplicate claims for the same service date and provider unless corrected and
+resubmitted.
+7 Claims Processing Rules
+7.1 Duplicate Claims
+A claim is considered duplicate if Member ID, Provider NPI, Date of service, CPT /
+procedure code, and billed amount all match. Duplicate claims are denied with reason:
+"Duplicate claim submission."
+7.2 Coding Consistency
+Claims are routed for coding review if the diagnosis and procedure codes are clinically
+inconsistent based on standard coding guidelines. Such claims must not be approved
+until coding review is complete.
+8 Appeals
+Members and providers have the right to appeal a denial within 180 days. Appeals must
+include a written appeal request, the denial letter or claim reference number, and any
+new clinical documentation relevant to the denial reason. Appeals that include new,
+relevant clinical documentation addressing the original denial reason should be
+re-evaluated on the merits; appeals without new or relevant documentation may be
+upheld.
+9 Contact Information
+For questions about benefits, Prior Authorization, or claim status, contact Aetna
+Member Support at 1-800-555-0122 or via the Member Portal.

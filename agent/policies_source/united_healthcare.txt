@@ -1,0 +1,98 @@
+SYNTHETIC EXAMPLE POLICY -- NOT A REAL INSURER DOCUMENT
+Generated for the claims-review-agent demo, adapted from the HorizonCare Silver PPO
+sample structure. Do not use for real coverage determinations.
+
+Plan Name: UHC Choice Plus 2025
+Effective Date: January 1, 2025
+Document Version: v1.0
+Applies To: In-network and out-of-network benefits unless otherwise stated.
+
+1 Overview of Covered Benefits
+This Policy provides coverage for Medically Necessary services that are not otherwise
+excluded. Covered Benefits include, but are not limited to:
+- Physician office visits and specialist consultations
+- Diagnostic imaging (e.g., ultrasound, CT, MRI)
+- Outpatient and emergency surgical procedures
+- Emergency services
+- Prescription drugs (Formulary-based), including short-course oral antibiotics
+
+2 Member Eligibility and Plan Status
+Benefits are payable only if the member is enrolled and the Plan is active on the date
+of service. If the member's Plan is inactive at the time services are rendered, the
+claim will be denied. Denial reason: "Plan inactive at time of service."
+
+3 Prior Authorization (Pre-Approval)
+Prior Authorization is required for certain high-cost or high-risk services before they
+are performed.
+
+3.1 Services Requiring Prior Authorization
+The following services require Prior Authorization:
+- MRI (all anatomical regions)
+- CT scans (except emergency)
+- Elective inpatient admissions
+- Durable medical equipment (DME) exceeding $500
+Claims for these services performed without approval may be denied unless retroactive
+authorization is granted. Emergency surgical procedures (e.g., emergency appendectomy)
+do not require Prior Authorization.
+
+3.2 Documentation Required
+Prior Authorization requests must include:
+1. Ordering provider's clinical note
+2. Relevant diagnosis code(s)
+3. Prior treatment history (if applicable)
+4. Expected service date and location
+If documentation is missing, the request will be pended until complete information is
+received.
+
+4 Medical Necessity Standard
+A service is considered Medically Necessary if it is:
+- Consistent with generally accepted standards of medical practice;
+- Clinically appropriate in type, frequency, and setting;
+- Not primarily for convenience of the member or provider;
+- The most cost-effective option among clinically comparable alternatives.
+
+5 Coverage for Diagnostic Imaging
+5.1 MRI Coverage
+MRI is covered when all of the following conditions are met:
+- A covered diagnosis is present; and
+- Conservative treatment has been attempted (unless contraindicated); and
+- Prior Authorization has been approved.
+Examples of covered diagnoses for lumbar spine MRI include:
+- M54.5 Low back pain
+- M51.26 Other intervertebral disc displacement, lumbar region
+
+5.2 Non-Covered Imaging
+Diagnostic imaging is not covered when requested for screening without symptoms
+(unless explicitly included as preventive care), related to excluded procedures, or
+lacking documentation supporting Medical Necessity.
+
+6 Exclusions
+The Plan does not cover:
+1. Cosmetic or reconstructive procedures not required by trauma or congenital anomaly
+2. Services deemed not Medically Necessary
+3. Experimental or investigational treatments
+4. Services for which required Prior Authorization was not obtained
+5. Duplicate claims for the same service date and provider, unless corrected and
+   resubmitted
+
+7 Claims Processing Rules
+7.1 Duplicate Claims
+A claim is considered duplicate if Member ID, Provider NPI, Date of service, CPT /
+procedure code, and billed amount all match. Duplicate claims will be denied with
+reason: "Duplicate claim submission."
+
+7.2 Coding Consistency
+Claims are routed for coding review if the diagnosis and procedure codes are clinically
+inconsistent based on standard coding guidelines (e.g., a screening/routine-exam
+diagnosis code billed alongside a major surgical procedure code). Such claims must not
+be approved until coding review is complete.
+
+8 Appeals
+Members and providers have the right to appeal a denial within 180 days. Appeals must
+include a written appeal request, the denial letter or claim reference number, and any
+new clinical documentation relevant to the denial reason. Appeals without new or
+relevant documentation may be upheld.
+
+9 Contact Information
+For questions about benefits, Prior Authorization, or claim status, contact UHC Member
+Support at 1-800-555-0111 or via the Member Portal.

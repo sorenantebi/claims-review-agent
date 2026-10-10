@@ -1,0 +1,268 @@
+[
+  {
+    "claim_id": "CLM1001",
+    "member_status": "active",
+    "claim_type": "preapproval",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "M54.5",
+    "procedure_code": "MRI-LS-SPINE",
+    "claimed_amount": 2200,
+    "supporting_documents": [
+      "clinical_note"
+    ],
+    "provider_notes": "Persistent low back pain for 6 months, conservative therapy failed.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1002",
+    "member_status": "inactive",
+    "claim_type": "standard",
+    "insurance_provider": "Aetna",
+    "diagnosis_code": "E11.9",
+    "procedure_code": "OFFICE-VISIT",
+    "claimed_amount": 150,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Routine visit for diabetes follow-up.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1003",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "Z00.00",
+    "procedure_code": "APPENDECTOMY",
+    "claimed_amount": 7800,
+    "supporting_documents": [
+      "op_note"
+    ],
+    "provider_notes": "Appendectomy performed in emergency setting.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1004",
+    "member_status": "active",
+    "claim_type": "preapproval",
+    "insurance_provider": "Blue Cross Blue Shield",
+    "diagnosis_code": "J45.40",
+    "procedure_code": "BIOLOGIC-INJECTION",
+    "claimed_amount": 12000,
+    "supporting_documents": [],
+    "provider_notes": "Severe persistent asthma uncontrolled on inhaled steroids.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1005",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "L03.90",
+    "procedure_code": "ORAL-ANTIBIOTIC",
+    "claimed_amount": 85,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Cellulitis treated with oral antibiotics.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1006",
+    "member_status": "active",
+    "claim_type": "appeal",
+    "insurance_provider": "Aetna",
+    "diagnosis_code": "F32.9",
+    "procedure_code": "PSYCH-THERAPY",
+    "claimed_amount": 900,
+    "supporting_documents": [
+      "appeal_letter",
+      "clinical_note"
+    ],
+    "provider_notes": "Appeal for previously denied psychotherapy sessions.",
+    "prior_denial_reason": "Insufficient documentation of medical necessity."
+  },
+  {
+    "claim_id": "CLM1008",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "Aetna",
+    "diagnosis_code": "S72.001A",
+    "procedure_code": "HIP-REPLACEMENT",
+    "claimed_amount": 15500,
+    "supporting_documents": [
+      "op_note",
+      "discharge_summary"
+    ],
+    "provider_notes": "Hip fracture treated surgically.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM1009",
+    "member_status": "active",
+    "claim_type": "appeal",
+    "insurance_provider": "Blue Cross Blue Shield",
+    "diagnosis_code": "E78.5",
+    "procedure_code": "LIPID-PANEL",
+    "claimed_amount": 110,
+    "supporting_documents": [
+      "appeal_letter"
+    ],
+    "provider_notes": "Member appealing denial for lipid panel deemed screening only.",
+    "prior_denial_reason": "Service considered preventive and not covered under this plan."
+  },
+  {
+    "claim_id": "CLM2001",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "Blue Cross Blue Shield",
+    "diagnosis_code": "E78.5",
+    "procedure_code": "LIPID-PANEL",
+    "claimed_amount": 95,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Routine annual screening lipid panel, patient asymptomatic.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM2002",
+    "member_status": "active",
+    "claim_type": "preapproval",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "M54.5",
+    "procedure_code": "MRI-LS-SPINE",
+    "claimed_amount": 1800,
+    "supporting_documents": [
+      "clinical_note",
+      "prior_treatment_history"
+    ],
+    "provider_notes": "Patient requests MRI for convenience prior to upcoming travel; no new symptoms reported since last visit.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3001",
+    "member_status": "inactive",
+    "claim_type": "standard",
+    "insurance_provider": "Aetna",
+    "diagnosis_code": "Z00.00",
+    "procedure_code": "APPENDECTOMY",
+    "claimed_amount": 800,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Emergency appendectomy performed; unrelated diagnosis code submitted in error.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3002",
+    "member_status": "inactive",
+    "claim_type": "preapproval",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "M54.5",
+    "procedure_code": "MRI-LS-SPINE",
+    "claimed_amount": 1800,
+    "supporting_documents": [],
+    "provider_notes": "MRI requested for lower back pain.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3003",
+    "member_status": "inactive",
+    "claim_type": "standard",
+    "insurance_provider": "Blue Cross Blue Shield",
+    "diagnosis_code": "E78.5",
+    "procedure_code": "LIPID-PANEL",
+    "claimed_amount": 6200,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "High-cost specialty lipid panel and consult.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3004",
+    "member_status": "active",
+    "claim_type": "preapproval",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "Z00.00",
+    "procedure_code": "MRI-LS-SPINE",
+    "claimed_amount": 1600,
+    "supporting_documents": [],
+    "provider_notes": "MRI requested; diagnosis code appears to be entered incorrectly.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3005",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "Cigna",
+    "diagnosis_code": "L03.90",
+    "procedure_code": "ORAL-ANTIBIOTIC",
+    "claimed_amount": 80,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Routine antibiotic treatment for cellulitis.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3006",
+    "member_status": "active",
+    "claim_type": "preapproval",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "M54.5",
+    "procedure_code": "MRI-LS-SPINE",
+    "claimed_amount": 2100,
+    "supporting_documents": [
+      "clinical_note",
+      "prior_treatment_history"
+    ],
+    "provider_notes": "Patient requests MRI immediately; explicitly states no conservative treatment (physical therapy or medication) has been tried yet.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3007",
+    "member_status": "active",
+    "claim_type": "appeal",
+    "insurance_provider": "Blue Cross Blue Shield",
+    "diagnosis_code": "E78.5",
+    "procedure_code": "LIPID-PANEL",
+    "claimed_amount": 70,
+    "supporting_documents": [
+      "appeal_letter",
+      "clinical_note"
+    ],
+    "provider_notes": "Appeal submitted citing new clinical note; however the clinical note itself, on review, describes only a routine annual physical with no new symptoms since the original screening, identical to the original denied encounter.",
+    "prior_denial_reason": "Service considered preventive and not covered under this plan."
+  },
+  {
+    "claim_id": "CLM3008",
+    "member_status": "active",
+    "claim_type": "standard",
+    "insurance_provider": "United Healthcare",
+    "diagnosis_code": "L03.90",
+    "procedure_code": "ORAL-ANTIBIOTIC",
+    "claimed_amount": 95,
+    "supporting_documents": [
+      "claim_form"
+    ],
+    "provider_notes": "Patient presented with some signs of possible infection; treatment course adjusted per clinical judgment.",
+    "prior_denial_reason": null
+  },
+  {
+    "claim_id": "CLM3009",
+    "member_status": "active",
+    "claim_type": "appeal",
+    "insurance_provider": "Aetna",
+    "diagnosis_code": "F41.1",
+    "procedure_code": "PSYCH-THERAPY",
+    "claimed_amount": 150,
+    "supporting_documents": [
+      "appeal_letter",
+      "clinical_note"
+    ],
+    "provider_notes": "Patient continues treatment; clinical note notes symptoms are 'variable' and functional impact 'depends on the week.'",
+    "prior_denial_reason": "Insufficient documentation of medical necessity."
+  }
+]

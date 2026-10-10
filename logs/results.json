@@ -1,0 +1,1061 @@
+[
+  {
+    "claim_id": "CLM1001",
+    "decision": "approve_pre_authorization",
+    "summary": "Pre-authorization approved: covered diagnosis M54.5, \"Persistent low back pain for 6 months, conservative therapy failed.\", clinical note supplied, active member.",
+    "rationale": [
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Claim is a preapproval request for lumbar spine MRI",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "MRI requires prior authorization",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "3.1",
+        "title": "Services Requiring Prior Authorization",
+        "excerpt": "MRI (all anatomical regions)"
+      },
+      {
+        "assertion": "MRI is covered when covered diagnosis present and conservative treatment attempted",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "5.1",
+        "title": "MRI Coverage",
+        "excerpt": "Conservative treatment has been attempted (unless contraindicated); and"
+      },
+      {
+        "assertion": "M54.5 is a listed covered diagnosis for lumbar spine MRI",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "5.1",
+        "title": "MRI Coverage",
+        "excerpt": "M54.5 Low back pain"
+      },
+      {
+        "assertion": "Submitted diagnosis is M54.5",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      },
+      {
+        "assertion": "Notes document 6 months of low back pain and failed conservative therapy",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Policy requires the ordering provider's clinical note",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "3.2",
+        "title": "Documentation Required",
+        "excerpt": "Ordering provider's clinical note"
+      },
+      {
+        "assertion": "Clinical note supplied",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.8,
+    "token_usage": {
+      "input_tokens": 5740,
+      "output_tokens": 2783,
+      "cache_read_input_tokens": 23158,
+      "cache_creation_input_tokens": 20445,
+      "total_tokens": 8523,
+      "cost_usd": 0.22287396
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM1002",
+    "decision": "deny_claim",
+    "summary": "Plan inactive at time of service.",
+    "rationale": [
+      {
+        "assertion": "Plan inactive at time of service.",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit"
+    ]
+  },
+  {
+    "claim_id": "CLM1003",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Multiple review conditions triggered simultaneously: high_amount, mismatch. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+    "rationale": [
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: high_amount, mismatch. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "claimed_amount"
+      },
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: high_amount, mismatch. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      },
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: high_amount, mismatch. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "procedure_code"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit"
+    ]
+  },
+  {
+    "claim_id": "CLM1004",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Multiple review conditions triggered simultaneously: high_amount, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+    "rationale": [
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: high_amount, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "claimed_amount"
+      },
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: high_amount, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit"
+    ]
+  },
+  {
+    "claim_id": "CLM1005",
+    "decision": "approve_claim_payment",
+    "summary": "Approved $85: active member; policy covers \"short-course oral antibiotics\"; cellulitis diagnosis consistent with \"Cellulitis treated with oral antibiotics.\"",
+    "rationale": [
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Benefits payable only if plan active on date of service",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "2",
+        "title": "Member Eligibility and Plan Status",
+        "excerpt": "Benefits are payable only if the member is enrolled and the Plan is active on the date\nof service."
+      },
+      {
+        "assertion": "Short-course oral antibiotics are a covered benefit",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "1",
+        "title": "Overview of Covered Benefits",
+        "excerpt": "Prescription drugs (Formulary-based), including short-course oral antibiotics"
+      },
+      {
+        "assertion": "Procedure billed is oral antibiotic therapy",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "Diagnosis L03.90 is cellulitis, consistent with oral antibiotic treatment",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      },
+      {
+        "assertion": "Notes state cellulitis treated with oral antibiotics",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Oral antibiotics not on prior authorization list; no exclusion applies",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "3.1",
+        "title": "Services Requiring Prior Authorization",
+        "excerpt": "The following services require Prior Authorization:"
+      },
+      {
+        "assertion": "Payment equals claimed amount of $85",
+        "source": "claim_data",
+        "field": "claimed_amount"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": 85,
+      "recommended_action": null
+    },
+    "confidence": 0.88,
+    "token_usage": {
+      "input_tokens": 5726,
+      "output_tokens": 2693,
+      "cache_read_input_tokens": 27536,
+      "cache_creation_input_tokens": 15769,
+      "total_tokens": 8419,
+      "cost_usd": 0.17954816
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM1006",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Routed to senior reviewer: appeal of \"Insufficient documentation of medical necessity.\" includes a clinical_note, but no note content is available to confirm symptoms, functional impairment, and treatment frequency per \u00a75.1.",
+    "rationale": [
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Claim is an appeal of a prior denial",
+        "source": "claim_data",
+        "field": "claim_type"
+      },
+      {
+        "assertion": "Prior denial reason was insufficient documentation of medical necessity",
+        "source": "claim_data",
+        "field": "prior_denial_reason"
+      },
+      {
+        "assertion": "Outpatient individual psychotherapy is a covered benefit category",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "1",
+        "title": "Overview of Covered Benefits",
+        "excerpt": "Outpatient behavioral health services, including individual psychotherapy"
+      },
+      {
+        "assertion": "Psychotherapy coverage requires documented medical necessity, including diagnosis, symptoms/functional impairment, and treatment frequency",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "5.1",
+        "title": "Psychotherapy Coverage",
+        "excerpt": "Outpatient individual psychotherapy is covered when medical necessity is documented,"
+      },
+      {
+        "assertion": "Appeal includes appeal_letter and clinical_note, but only filenames are supplied; note content is not provided",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      },
+      {
+        "assertion": "Provider notes do not describe symptoms, functional impairment, treatment plan, or treatment frequency",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Appeals are re-evaluated on the merits only if new documentation addresses the denial reason; this cannot be verified from the record",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "8",
+        "title": "Appeals",
+        "excerpt": "re-evaluated on the merits; appeals without new or relevant documentation may be"
+      },
+      {
+        "assertion": "F32.9 diagnosis is submitted, but whether the clinical note fixes the original insufficiency cannot be confirmed",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.55,
+    "token_usage": {
+      "input_tokens": 5738,
+      "output_tokens": 3685,
+      "cache_read_input_tokens": 27548,
+      "cache_creation_input_tokens": 16823,
+      "total_tokens": 9423,
+      "cost_usd": 0.21014425999999997
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM1008",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Claimed amount $15,500.0 exceeds the $5,000 auto-review threshold. Routed directly to a senior medical reviewer without an automated coverage recommendation.",
+    "rationale": [
+      {
+        "assertion": "Claimed amount $15,500.0 exceeds the $5,000 auto-review threshold. Routed directly to a senior medical reviewer without an automated coverage recommendation.",
+        "source": "claim_data",
+        "field": "claimed_amount"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit"
+    ]
+  },
+  {
+    "claim_id": "CLM1009",
+    "decision": "deny_claim",
+    "summary": "Appeal denied, original denial upheld: only an appeal letter was submitted, and policy 5.2 says \"an appeal letter alone\" without new clinical documentation \"does not meet this bar and the original denial\" should be upheld.",
+    "rationale": [
+      {
+        "assertion": "Claim is an appeal of a prior denial",
+        "source": "claim_data",
+        "field": "claim_type"
+      },
+      {
+        "assertion": "Prior denial classified the lipid panel as preventive and not covered",
+        "source": "claim_data",
+        "field": "prior_denial_reason"
+      },
+      {
+        "assertion": "Only an appeal letter was submitted; no new clinical documentation",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      },
+      {
+        "assertion": "Provider notes describe the appeal of a screening-only lipid panel and give no qualifying diagnosis or symptoms",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Policy excludes routine screening lipid panels from standard coverage",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "5.2",
+        "title": "Preventive and Screening Services",
+        "excerpt": "Routine screening laboratory panels (e.g., a lipid panel performed without symptoms or"
+      },
+      {
+        "assertion": "Policy says an appeal letter alone does not overturn a preventive-screening denial",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "5.2",
+        "title": "Preventive and Screening Services",
+        "excerpt": "an appeal letter alone,\nwithout new clinical documentation, does not meet this bar and the original denial\nshould be upheld."
+      },
+      {
+        "assertion": "Appeals without new or relevant clinical documentation may be upheld",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "8",
+        "title": "Appeals",
+        "excerpt": "Appeals without new or\nrelevant clinical documentation may be upheld."
+      },
+      {
+        "assertion": "Routine preventive screening is a plan exclusion",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "6",
+        "title": "Exclusions",
+        "excerpt": "routine preventive screening as described in 5.2"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.9,
+    "token_usage": {
+      "input_tokens": 2877,
+      "output_tokens": 1123,
+      "cache_read_input_tokens": 13782,
+      "cache_creation_input_tokens": 7895,
+      "total_tokens": 4000,
+      "cost_usd": 0.08797603
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM2001",
+    "decision": "deny_claim",
+    "summary": "Denied: notes state \"Routine annual screening lipid panel, patient asymptomatic.\"; policy classifies this as preventive screening \"excluded from standard coverage under this plan\" (\u00a75.2, \u00a76).",
+    "rationale": [
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Standard claim for a lipid panel",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "Provider notes describe a routine annual screening panel in an asymptomatic patient",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Routine screening lipid panels without symptoms are preventive screening and excluded from standard coverage",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "5.2",
+        "title": "Preventive and Screening Services",
+        "excerpt": "Routine screening laboratory panels (e.g., a lipid panel performed without symptoms or\na qualifying diagnosis) are classified as preventive screening and are excluded from\nstandard coverage under this plan."
+      },
+      {
+        "assertion": "Plan exclusions list routine preventive screening",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "6",
+        "title": "Exclusions",
+        "excerpt": "routine preventive screening as described in 5.2"
+      },
+      {
+        "assertion": "Diagnosis E78.5 is submitted, but the notes say the panel is routine screening, not monitoring of a documented condition, and give no clinical documentation of a qualifying indication",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      },
+      {
+        "assertion": "Only a claim form was supplied, with no clinical note supporting a symptomatic or diagnostic indication",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.8,
+    "token_usage": {
+      "input_tokens": 2860,
+      "output_tokens": 1782,
+      "cache_read_input_tokens": 13765,
+      "cache_creation_input_tokens": 8198,
+      "total_tokens": 4642,
+      "cost_usd": 0.09977243000000001
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM2002",
+    "decision": "deny_claim",
+    "summary": "Preauthorization denied: provider notes say the MRI is \"for convenience prior to upcoming travel; no new symptoms reported\", which fails the policy requirement \"Not primarily for convenience of the member or provider;\".",
+    "rationale": [
+      {
+        "assertion": "Claim is a preapproval for lumbar spine MRI",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "MRI requires prior authorization",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "3.1",
+        "title": "Services Requiring Prior Authorization",
+        "excerpt": "MRI (all anatomical regions)"
+      },
+      {
+        "assertion": "Medical necessity requires service not primarily for convenience",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "4",
+        "title": "Medical Necessity Standard",
+        "excerpt": "Not primarily for convenience of the member or provider;"
+      },
+      {
+        "assertion": "Provider notes state MRI requested for convenience before travel with no new symptoms",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Services not medically necessary are excluded",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "6",
+        "title": "Exclusions",
+        "excerpt": "Services deemed not Medically Necessary"
+      },
+      {
+        "assertion": "Imaging lacking medical-necessity support is not covered",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "5.2",
+        "title": "Non-Covered Imaging",
+        "excerpt": "lacking documentation supporting Medical Necessity"
+      },
+      {
+        "assertion": "Member plan is active; denial is not eligibility-based",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.9,
+    "token_usage": {
+      "input_tokens": 5788,
+      "output_tokens": 2486,
+      "cache_read_input_tokens": 33115,
+      "cache_creation_input_tokens": 13161,
+      "total_tokens": 8274,
+      "cost_usd": 0.15841566
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM3001",
+    "decision": "deny_claim",
+    "summary": "Plan inactive at time of service.",
+    "rationale": [
+      {
+        "assertion": "Plan inactive at time of service.",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit",
+      "also_triggered_mismatch"
+    ]
+  },
+  {
+    "claim_id": "CLM3002",
+    "decision": "deny_claim",
+    "summary": "Plan inactive at time of service.",
+    "rationale": [
+      {
+        "assertion": "Plan inactive at time of service.",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit",
+      "also_triggered_missing_docs"
+    ]
+  },
+  {
+    "claim_id": "CLM3003",
+    "decision": "deny_claim",
+    "summary": "Plan inactive at time of service.",
+    "rationale": [
+      {
+        "assertion": "Plan inactive at time of service.",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit",
+      "also_triggered_high_amount"
+    ]
+  },
+  {
+    "claim_id": "CLM3004",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Multiple review conditions triggered simultaneously: mismatch, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+    "rationale": [
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: mismatch, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      },
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: mismatch, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "Multiple review conditions triggered simultaneously: mismatch, missing_docs. No single condition takes priority over another here; escalated directly to a senior medical reviewer rather than resolving to one condition's specific action.",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "hard_override_short_circuit"
+    ]
+  },
+  {
+    "claim_id": "CLM3005",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Agent pipeline error during automated review: No policy document configured for insurer 'Cigna'. Known insurers: ['united healthcare', 'aetna', 'blue cross blue shield']",
+    "rationale": [
+      {
+        "assertion": "No policy document configured for insurer 'Cigna'. Known insurers: ['united healthcare', 'aetna', 'blue cross blue shield']",
+        "source": "claim_data",
+        "field": "claim_id"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": [
+      "agent_pipeline_error"
+    ]
+  },
+  {
+    "claim_id": "CLM3006",
+    "decision": "deny_claim",
+    "summary": "Pre-authorization denied: MRI requires \"Conservative treatment has been attempted (unless contraindicated)\"; notes state \"no conservative treatment (physical therapy or medication) has been tried yet\".",
+    "rationale": [
+      {
+        "assertion": "MRI coverage requires conservative treatment to have been attempted unless contraindicated",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "5.1",
+        "title": "MRI Coverage",
+        "excerpt": "Conservative treatment has been attempted (unless contraindicated)"
+      },
+      {
+        "assertion": "Provider notes say no conservative treatment has been tried yet; no contraindication documented",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Patient is requesting MRI immediately, before any conservative care",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Medically necessary services must not be primarily for member convenience",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "4",
+        "title": "Medical Necessity Standard",
+        "excerpt": "Not primarily for convenience of the member or provider"
+      },
+      {
+        "assertion": "Plan excludes services not deemed medically necessary",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "6",
+        "title": "Exclusions",
+        "excerpt": "Services deemed not Medically Necessary"
+      },
+      {
+        "assertion": "M54.5 is a listed covered diagnosis, but the conservative-treatment criterion is still unmet",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "5.1",
+        "title": "MRI Coverage",
+        "excerpt": "M54.5 Low back pain"
+      },
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.9,
+    "token_usage": {
+      "input_tokens": 5800,
+      "output_tokens": 2589,
+      "cache_read_input_tokens": 27610,
+      "cache_creation_input_tokens": 15845,
+      "total_tokens": 8389,
+      "cost_usd": 0.17940486
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM3007",
+    "decision": "deny_claim",
+    "summary": "Appeal denied, original denial upheld: the clinical note describes \"only a routine annual physical with no new symptoms since the original screening\"; policy permits overturn only if \"new clinical documentation is submitted\"",
+    "rationale": [
+      {
+        "assertion": "Claim is an appeal of a prior denial",
+        "source": "claim_data",
+        "field": "claim_type"
+      },
+      {
+        "assertion": "Prior denial classified lipid panel as preventive and not covered",
+        "source": "claim_data",
+        "field": "prior_denial_reason"
+      },
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Routine screening lipid panels without symptoms or qualifying diagnosis are excluded as preventive",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "5.2",
+        "title": "Preventive and Screening Services",
+        "excerpt": "Routine screening laboratory panels (e.g., a lipid panel performed without symptoms or\na qualifying diagnosis) are classified as preventive screening and are excluded from\nstandard coverage under this plan."
+      },
+      {
+        "assertion": "Preventive denials are overturned only with new clinical documentation establishing a qualifying diagnosis or symptomatic indication",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "5.2",
+        "title": "Preventive and Screening Services",
+        "excerpt": "establishing a qualifying diagnosis or symptomatic indication; an appeal letter alone,\nwithout new clinical documentation, does not meet this bar and the original denial\nshould be upheld."
+      },
+      {
+        "assertion": "Submitted clinical note describes a routine annual physical with no new symptoms, identical to the originally denied encounter",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Appeals without new or relevant clinical documentation may be upheld",
+        "source": "policy",
+        "insurer": "Blue Cross Blue Shield",
+        "section": "8",
+        "title": "Appeals",
+        "excerpt": "Appeals without new or relevant clinical documentation may be upheld."
+      },
+      {
+        "assertion": "Supporting documents are an appeal letter and a clinical note that adds no new clinical information",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.8,
+    "token_usage": {
+      "input_tokens": 2927,
+      "output_tokens": 1543,
+      "cache_read_input_tokens": 13832,
+      "cache_creation_input_tokens": 8236,
+      "total_tokens": 4470,
+      "cost_usd": 0.09911903000000001
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM3008",
+    "decision": "request_missing_documentation",
+    "summary": "Request clinical note: active member, oral antibiotic covered, codes consistent, but notes only state \"some signs of possible infection\" and no clinical note supports medical necessity.",
+    "rationale": [
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Benefits payable only if plan active on date of service",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "2",
+        "title": "Member Eligibility and Plan Status",
+        "excerpt": "Benefits are payable only if the member is enrolled and the Plan is active on the date\nof service."
+      },
+      {
+        "assertion": "Short-course oral antibiotics are a covered benefit category",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "1",
+        "title": "Overview of Covered Benefits",
+        "excerpt": "Prescription drugs (Formulary-based), including short-course oral antibiotics"
+      },
+      {
+        "assertion": "Diagnosis L03.90 (cellulitis) and oral antibiotic procedure appear clinically consistent; no coding review trigger",
+        "source": "claim_data",
+        "field": "procedure_code"
+      },
+      {
+        "assertion": "Coverage limited to Medically Necessary services",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "1",
+        "title": "Overview of Covered Benefits",
+        "excerpt": "This Policy provides coverage for Medically Necessary services that are not otherwise\nexcluded."
+      },
+      {
+        "assertion": "Services not Medically Necessary are excluded",
+        "source": "policy",
+        "insurer": "United Healthcare",
+        "section": "6",
+        "title": "Exclusions",
+        "excerpt": "Services deemed not Medically Necessary"
+      },
+      {
+        "assertion": "Provider notes are vague: only 'possible infection' and unspecified treatment adjustment; do not confirm the coded diagnosis",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Only claim form supplied; no clinical note to support medical necessity",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": [
+        "clinical_note"
+      ],
+      "routed_to": null,
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.6,
+    "token_usage": {
+      "input_tokens": 5754,
+      "output_tokens": 3342,
+      "cache_read_input_tokens": 27564,
+      "cache_creation_input_tokens": 16443,
+      "total_tokens": 9096,
+      "cost_usd": 0.19939105999999998
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  },
+  {
+    "claim_id": "CLM3009",
+    "decision": "route_to_senior_reviewer",
+    "summary": "Routed to senior review: appeal of \"Insufficient documentation of medical necessity.\" includes a new clinical note, but it describes symptoms as variable and functional impact as \"depends on the week\", and no treatment frequency is stated, so it is unclear whether \u00a75.1 criteria are met.",
+    "rationale": [
+      {
+        "assertion": "Claim is an appeal of a prior denial for insufficient documentation of medical necessity",
+        "source": "claim_data",
+        "field": "prior_denial_reason"
+      },
+      {
+        "assertion": "Member plan is active",
+        "source": "claim_data",
+        "field": "member_status"
+      },
+      {
+        "assertion": "Outpatient individual psychotherapy is a covered benefit",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "1",
+        "title": "Overview of Covered Benefits",
+        "excerpt": "Outpatient behavioral health services, including individual psychotherapy"
+      },
+      {
+        "assertion": "Psychotherapy requires documented diagnosis, symptoms and functional impairment, and stated treatment frequency",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "5.1",
+        "title": "Psychotherapy Coverage",
+        "excerpt": "a qualifying behavioral health diagnosis, a treatment plan or clinical\nnote describing symptoms and functional impairment, and a stated treatment frequency"
+      },
+      {
+        "assertion": "Appeal includes an appeal letter and a clinical note as new documentation",
+        "source": "claim_data",
+        "field": "supporting_documents"
+      },
+      {
+        "assertion": "Clinical note describes symptoms as variable and functional impact as week-dependent; functional impairment is ambiguous",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "No stated treatment frequency or treatment plan in the supplied notes",
+        "source": "claim_data",
+        "field": "provider_notes"
+      },
+      {
+        "assertion": "Overturn requires new documentation that addresses the original insufficiency",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "5.1",
+        "title": "Psychotherapy Coverage",
+        "excerpt": "is submitted that addresses the original\ninsufficiency"
+      },
+      {
+        "assertion": "Appeals with new relevant documentation are re-evaluated on the merits",
+        "source": "policy",
+        "insurer": "Aetna",
+        "section": "8",
+        "title": "Appeals",
+        "excerpt": "Appeals that include new, relevant clinical documentation addressing the original denial reason should be\nre-evaluated on the merits"
+      },
+      {
+        "assertion": "Diagnosis F41.1 is a behavioral health diagnosis consistent with psychotherapy",
+        "source": "claim_data",
+        "field": "diagnosis_code"
+      }
+    ],
+    "next_steps": {
+      "documents_requested": null,
+      "routed_to": "senior_reviewer",
+      "payment_in_dollars": null,
+      "recommended_action": null
+    },
+    "confidence": 0.45,
+    "token_usage": {
+      "input_tokens": 2837,
+      "output_tokens": 1918,
+      "cache_read_input_tokens": 19259,
+      "cache_creation_input_tokens": 5810,
+      "total_tokens": 4755,
+      "cost_usd": 0.08542093
+    },
+    "disclaimer": "This is a coverage determination based on your plan's policy document and the information on file. It is not medical advice.",
+    "validator_notes": []
+  }
+]

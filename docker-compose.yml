@@ -1,0 +1,28 @@
+# Local Postgres for claims storage (design_report.md, section 2.1 / 7.1).
+# This is the MVP's stand-in for a real payer's claims-administration
+# platform -- a real deployment reads from that system (via CDC) rather than
+# owning a Postgres instance for claims itself. For this repo's purposes,
+# Postgres is the actual, queryable claims store, not a JSON file.
+#
+# Usage:
+#   docker compose up -d
+#   python -m scripts.seed_claims_db   # loads agent/claims_data.json in, once
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: claims
+      POSTGRES_PASSWORD: claims
+      POSTGRES_DB: claims
+    ports:
+      - "5432:5432"
+    volumes:
+      - claims_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claims -d claims"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  claims_pg_data:

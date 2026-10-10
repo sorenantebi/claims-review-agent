@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claims Review Agent — Design Summary</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/monokai.css">
+<style>
+  :root{
+    --accent:#5b5bd6; --muted:#6b6b70; --border:#e4e2de; --code-bg:#f2f1ee;
+  }
+  .reveal{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
+  .reveal h1, .reveal h2, .reveal h3{ font-weight:700; text-transform:none; letter-spacing:0; }
+  .reveal h1{ color:#1c1c1e; font-size:1.9em; }
+  .reveal h2{ color:#1c1c1e; font-size:1.35em; border-bottom:2px solid var(--accent); padding-bottom:0.2em; margin-bottom:0.6em; }
+  .reveal h3{ color:var(--accent); font-size:0.95em; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:0.3em; }
+  .reveal p, .reveal li{ color:#2a2a2c; }
+  .reveal .subtitle{ color:var(--muted); font-size:0.6em; font-weight:400; }
+  .reveal ul, .reveal ol{ display:block; }
+  .reveal li{ margin-bottom:0.35em; font-size:0.85em; }
+  .reveal section{ text-align:left; }
+  .reveal section.center{ text-align:center; }
+  .reveal table{ font-size:0.62em; border-collapse:collapse; width:100%; }
+  .reveal table th, .reveal table td{ border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top; }
+  .reveal table th{ background:#f7f6f3; color:var(--accent); }
+  .reveal code{ background:var(--code-bg); border-radius:4px; }
+  .reveal pre{ box-shadow:none; border:1px solid var(--border); border-radius:8px; width:100%; }
+  .reveal pre code{ font-size:0.62em; max-height:480px; }
+  .badge{ display:inline-block; font-size:0.4em; color:var(--muted); border:1px solid var(--border);
+          border-radius:999px; padding:3px 14px; margin-bottom:14px; letter-spacing:0.02em; }
+  .kicker{ color:var(--muted); font-size:0.55em; margin-top:0; }
+  .diagram-wrap{ max-height:64vh; overflow:auto; border:1px solid var(--border); border-radius:10px;
+                 padding:10px; background:#fff; }
+  .diagram-wrap .mermaid{ display:flex; justify-content:center; }
+  .two-col{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:2em; align-items:start; }
+  .callout{ background:#f2f1ee; border-left:4px solid var(--accent); padding:0.6em 1em; margin-top:0.6em;
+            font-size:0.75em; border-radius:0 6px 6px 0; }
+  .tight li{ margin-bottom:0.2em; }
+  .small{ font-size:0.75em; }
+  .reveal .actions-code{ font-size:0.68em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1: Title -->
+    <section class="center" data-background-color="#faf9f7">
+      <span class="badge">Design Report Summary</span>
+      <h1>Insurance Claims<br>Review Agent</h1>
+      <p class="subtitle">A policy-grounded agentic system for medical claims adjudication</p>
+    </section>
+
+    <!-- 2: Overview -->
+    <section>
+      <h2>What the Agent Does</h2>
+      <p class="kicker">Two inputs: structured claim data + unstructured policy text</p>
+      <ul>
+        <li>Interprets the claim's current state, then consults the relevant policy to validate coverage.</li>
+        <li>Decides the next action from a <strong>fixed workflow</strong> and a <strong>closed, six-action set</strong>.</li>
+        <li>Returns a decision with a <strong>grounded, per-assertion rationale</strong> — never free-text reasoning alone.</li>
+        <li>Deterministic checks run first; the LLM runs only when policy interpretation needs judgment.</li>
+        <li>Unsafe or unresolved cases are routed to human review, never guessed.</li>
+      </ul>
+      <div class="callout">MVP: Claude Agent SDK + Sonnet, one schema-constrained tool call per claim (<code>submit_claim_decision</code>), across 3 insurers with synthetic test claims.</div>
+    </section>
+
+    <!-- 3: Workflow diagram intro -->
+    <section>
+      <h2>1 · Claim Workflow: State → Action</h2>
+      <p class="kicker">LangGraph orchestration · OpenTelemetry + Langfuse observability</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid" style="border:none;">
+flowchart TD
+  START(["Claim event"]) --> OV{"deterministic overrides<br/>4 conditions, evaluated independently"}
+  OV -->|"member inactive at date of service"| DENY["deny<br/>hard stop, no LLM call"]
+  OV -->|"exactly one of: amount / mismatch / missing docs"| SINGLE{"which one?"}
+  OV -->|"2+ of: amount, mismatch, missing docs, together"| MULTI["route to senior reviewer<br/>multi_override_review<br/>collision itself is the signal, no LLM call"]
+  SINGLE -->|"amount over threshold"| SENIOR["route to senior reviewer<br/>hard stop, no LLM call"]
+  SINGLE -->|"diagnosis/procedure mismatch"| CODE["route to coding review<br/>hard stop, no LLM call"]
+  SINGLE -->|"missing essential documentation"| DOCS["request missing documentation<br/>hard stop, no LLM call"]
+  OV -->|"none of the above"| RET["retrieve policy evidence<br/>hybrid search: insurer + plan + effective date"]
+  RET --> TYPE{"claim_type?"}
+  TYPE -->|"preapproval"| PA["preapproval workflow<br/>authorization, coverage,<br/>medical necessity, documents"]
+  TYPE -->|"standard"| STANDARD["standard workflow<br/>coverage, code consistency,<br/>payment"]
+  TYPE -->|"appeal"| APPEAL["appeal workflow<br/>prior denial, new relevant evidence,<br/>re-evaluate"]
+  PA --> LLM["llm_decision<br/>single structured tool call"]
+  STANDARD --> LLM
+  APPEAL --> LLM
+  LLM --> GC{"grounding check<br/>deterministic"}
+  GC -->|"ungrounded citation: retry once"| LLM2["retry with correction note"]
+  GC -->|"clean"| VAL["deterministic validation<br/>arguments, amounts, doc lists"]
+  LLM2 --> GC2{"still ungrounded<br/>after retry?"}
+  GC2 -->|"yes"| GFAIL["route to senior reviewer<br/>decision discarded entirely,<br/>not just the bad citation"]
+  GC2 -->|"no"| VAL
+
+  GATE{"per-action-type autonomy gate"}
+  DENY --> GATE
+  CODE --> GATE
+  DOCS --> GATE
+  SENIOR --> GATE
+  MULTI --> GATE
+  VAL --> GATE
+  GFAIL --> GATE
+  GATE -->|"cleared action type"| AUTO["auto-execute"]
+  GATE -->|"not cleared, or policy requires a human"| HUMANR["human review<br/>reviewer signs off before executing"]
+  AUTO --> OUT["write-back + audit log"]
+  HUMANR --> OUT
+        </pre>
+      </div>
+    </section>
+
+    <!-- 4: Overrides -->
+    <section>
+      <h2>Deterministic Overrides Come First</h2>
+      <p class="kicker">Four gates, evaluated independently, never seen by the model</p>
+      <table>
+        <tr><th>Condition</th><th>Action when it fires alone</th></tr>
+        <tr><td>Member inactive at date of service</td><td>Deny</td></tr>
+        <tr><td>Claimed amount above the auto-review threshold ($5,000)</td><td>Route to senior review</td></tr>
+        <tr><td>Diagnosis / procedure code inconsistency</td><td>Route to coding review</td></tr>
+        <tr><td>Missing essential documentation for the claim type</td><td>Request the missing document(s)</td></tr>
+      </table>
+      <div class="callout">2+ overrides firing together → escalate to a senior reviewer. The collision itself is the signal — the MVP does not rank or prioritize between them.</div>
+    </section>
+
+    <!-- 5: Six actions -->
+    <section>
+      <h2>A Closed, Six-Action Set</h2>
+      <p class="kicker">The model proposes one action via tool calling; application code validates it deterministically</p>
+      <pre class="actions-code"><code data-trim class="language-python">
+approve_pre_authorization()
+approve_claim_payment(payment_in_dollars: float)
+deny_claim()
+request_missing_documentation(documents: list[str])
+route_to_senior_reviewer()
+route_to_coding_review()
+      </code></pre>
+      <div class="callout">Grounding check: every rationale assertion needs a valid evidence pointer (policy section or claim field). One correction retry is allowed — if still ungrounded, the decision is <strong>discarded</strong> and escalated, not degraded and kept.</div>
+    </section>
+
+    <!-- 6: Response schema -->
+    <section>
+      <h2>Every Decision, One Shared Schema</h2>
+      <ul class="tight">
+        <li><code>decision</code> — enum of the 6 actions, never free text</li>
+        <li><code>rationale[]</code> — one evidence pointer per factual assertion (policy <code>section</code> or claim <code>field</code>), never inferred or paraphrased</li>
+        <li><code>confidence</code> — self-reported by the model, <strong>not independently verified</strong>; treated as a lever, not a metric</li>
+        <li><code>token_usage</code> — real tokens + cost per call, summed across retries</li>
+        <li>Fixed, non-model-generated <strong>disclaimer</strong> on every response</li>
+      </ul>
+      <div class="callout"><strong>Autonomy gate</strong> (production design): one more check after validation, keyed per action type — decides auto-execute vs. human sign-off. <code>approve_claim_payment</code> could be cleared for auto-execution while <code>deny_claim</code> stays fully human-gated by policy.</div>
+    </section>
+
+    <!-- 7: System design diagram -->
+    <section>
+      <h2>2 · System Design: PHI vs. Policy</h2>
+      <p class="kicker">Claims data is PHI and stays in the payer's system of record; policy documents are not</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid" style="border:none;">
+flowchart TB
+  subgraph PHI["PHI / BAA-covered boundary"]
+    CAP["Claims Administration Platform"]
+    CDC["CDC to Kafka<br/>claim-events topic"]
+    PGR[("Postgres read replica (claims)<br/>materialized view, never the write path")]
+    AGENT["Worker pool to LangGraph agent<br/>one invocation per claim event<br/>deterministic gates, retrieval, one LLM call, validation"]
+    WB["Write-back to Claims Platform<br/>via that platform's own API"]
+    AUDIT[("Tamper-evident audit log<br/>retention matched to state record rules")]
+    HUMANUI["Reviewer UI, human<br/>reads platform + audit log"]
+    CAP -->|"claim create / update"| CDC
+    CDC -->|"stream"| PGR
+    PGR --> AGENT
+    AGENT --> WB
+    AGENT --> AUDIT
+    AGENT --> HUMANUI
+  end
+
+  subgraph POLICY["Policy ingestion, outside PHI scope"]
+    DOC["Policy Document Management<br/>SPDs / EOCs, versioned by effective date"]
+    CHUNK["Chunk by section heading<br/>structural, not fixed-size or semantic"]
+    INDEX["Embed + index<br/>hybrid: vector + BM25"]
+    DOC -->|"on publish"| CHUNK --> INDEX
+  end
+  VEC[("Vector + keyword index<br/>filtered: insurer + plan + effective date")]
+  INDEX --> VEC
+  VEC -->|"hybrid search"| AGENT
+
+  CAND["Shadow candidate<br/>new prompt/model version<br/>logged only, never executed"]
+  AGENT -.mirror traffic.-> CAND
+  CAND -.promote / roll back, per action type.-> AGENT
+        </pre>
+      </div>
+    </section>
+
+    <!-- 8: MVP vs Production -->
+    <section>
+      <h2>MVP vs. Production</h2>
+      <table>
+        <tr><th>Layer</th><th>Production</th><th>MVP (reference implementation)</th></tr>
+        <tr><td>Claims storage</td><td>Postgres replica, fed by CDC</td><td>Postgres 16, seeded once from JSON, no CDC</td></tr>
+        <tr><td>Policy retrieval</td><td>pgvector / managed vector store</td><td>3 PDFs, filtered by insurer only, no ranking</td></tr>
+        <tr><td>Supplemental documents</td><td>OCR/parsed; content actually read by the model</td><td>Only the document <em>name</em> is checked; content assumed correct</td></tr>
+        <tr><td>Autonomy gate</td><td>Deterministic check per action type; rest go to reviewer queue</td><td>Not implemented; every claim's output is written identically</td></tr>
+        <tr><td>Rollout / shadow mode</td><td>Canary promotion per action type, with auto-rollback</td><td>No live pipeline; validated only by an offline harness</td></tr>
+      </table>
+    </section>
+
+    <!-- 9: Shadow mode -->
+    <section>
+      <h2>Shadow Mode: Safe Promotion Path</h2>
+      <div class="two-col">
+        <div class="diagram-wrap">
+          <pre class="mermaid" style="border:none;">
+flowchart TB
+  EVT["Live claim event"] --> CUR["Currently-deployed agent"]
+  EVT --> CAND["Candidate agent (new prompt/model)"]
+  CUR --> EXEC["Executes, writes back"]
+  CAND --> LOG["Logged only, never executed"]
+  LOG --> SAMPLE["Sampled vs. human/SME outcome"]
+  SAMPLE --> AGREE{"Agreement clears bar?"}
+  AGREE -->|no| HOLD["Hold candidate, feed into failure analysis"]
+  AGREE -->|yes, sustained| PROMOTE["Promote, per action type"]
+          </pre>
+        </div>
+        <ul class="tight">
+          <li>Candidate runs on real traffic but <strong>never</strong> writes back or executes.</li>
+          <li>Sampled against real executed decisions or SME judgment.</li>
+          <li>Promotion is <strong>per action type</strong>, not all-or-nothing.</li>
+          <li>Ramps as a canary percentage, with automatic rollback if agreement drops.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 10: Evaluation -->
+    <section>
+      <h2>3 · Evaluation Framework</h2>
+      <h3>Golden Set</h3>
+      <p class="small">19 curated claims covering every claim type, all 4 override conditions and their pairwise collisions, all 3 insurers plus the fail-closed path, and 5 ambiguity types.</p>
+      <table>
+        <tr><th>Category</th><th>Metric</th></tr>
+        <tr><td>Decision correctness</td><td><code>exact_match</code>, <code>match_with_alternate</code>, <code>arg_correct</code></td></tr>
+        <tr><td>Evidence grounding</td><td><code>grounding_recall</code>, <code>grounding_exhausted</code> rate</td></tr>
+        <tr><td>Robustness</td><td>Stratified accuracy/consistency, abstention precision + recall</td></tr>
+      </table>
+      <div class="callout">Grading is deterministic and code-based first; SME review and LLM-as-judge are supplements, only trusted once validated against human assessment.</div>
+    </section>
+
+    <!-- 11: Escalation & contradictions -->
+    <section>
+      <h2>4 · Escalation & Contradictions</h2>
+      <h3>Escalate to a human when…</h3>
+      <ul class="tight">
+        <li>Claim is above the auto-review threshold, or multiple overrides fire together</li>
+        <li>The model can't ground its evidence even after one retry</li>
+        <li>The model itself flags contradictory or insufficient evidence</li>
+        <li>The action type isn't yet promoted past shadow mode, or is policy-gated</li>
+      </ul>
+      <h3 style="margin-top:0.8em;">Four distinct failure situations</h3>
+      <table>
+        <tr><th>Situation</th><th>Action</th></tr>
+        <tr><td>Insufficient evidence</td><td>Request the specific missing item by name</td></tr>
+        <tr><td>Contradictory evidence</td><td>Route to a human; state the conflict — never guess which source wins</td></tr>
+        <tr><td>Ambiguous / open policy</td><td>Route to a human; state that policy doesn't resolve the case</td></tr>
+        <tr><td>Conflicting source authority</td><td>Route to a human rather than inventing a precedence rule</td></tr>
+      </table>
+    </section>
+
+    <!-- 12: Safety -->
+    <section>
+      <h2>Safety & Compliance Boundaries</h2>
+      <ul>
+        <li>Must avoid: medical advice beyond the policy's own language, invented rules where policy is silent, and treating out-of-scope sections as support.</li>
+        <li>A fixed, non-model-generated disclaimer appears on <strong>every</strong> response.</li>
+        <li>Clinical documents may require encryption/anonymization; the model runs behind a BAA-covered endpoint.</li>
+      </ul>
+    </section>
+
+    <!-- 13: Closing -->
+    <section class="center" data-background-color="#faf9f7">
+      <h2 style="border:none;">Key Takeaways</h2>
+      <ul style="display:inline-block; text-align:left;">
+        <li>Deterministic-first design keeps the LLM's footprint — and audit surface — small.</li>
+        <li>Every decision is schema-constrained, evidence-grounded, and fully traceable.</li>
+        <li>Shadow mode + a per-action-type autonomy gate open a safe path to more autonomy.</li>
+        <li>Evaluation is code-first; human review is reserved for what code genuinely can't catch.</li>
+      </ul>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/highlight.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: { fontSize: '13px' }
+  });
+
+  Reveal.initialize({
+    hash: true,
+    controls: true,
+    progress: true,
+    slideNumber: true,
+    center: false,
+    width: 1200,
+    height: 800,
+    margin: 0.06,
+    transition: 'slide',
+    plugins: [RevealHighlight]
+  }).then(function () {
+    mermaid.run({ querySelector: '.mermaid' });
+    Reveal.on('slidechanged', function () { Reveal.layout(); });
+  });
+</script>
+</body>
+</html>

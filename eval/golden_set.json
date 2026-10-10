@@ -1,0 +1,296 @@
+[
+  {
+    "claim_id": "CLM1001",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "request_missing_documentation",
+    "gold_documents": [
+      "prior_treatment_history"
+    ],
+    "required_evidence": {
+      "sections": [
+        "3.1",
+        "3.2",
+        "5.1"
+      ],
+      "claim_fields": [
+        "member_status",
+        "supporting_documents"
+      ]
+    },
+    "notes": "Genuinely ambiguous, included on purpose. Policy \u00a73.2 lists 'prior treatment history (if applicable)' as a separate PA document; provider_notes narrates conservative therapy failing, but no prior_treatment_history document is on file. Strict reading = missing docs (this is the gold label, and what the live agent has consistently produced). A looser reading (the clinical_note's narrative satisfies the requirement) would instead approve. Use this case to test whether the agent's stated policy is applied consistently, not to pretend there's a clean right answer."
+  },
+  {
+    "claim_id": "CLM1002",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "member_status"
+      ]
+    },
+    "notes": "Inactive member -- hard override, deterministic, should never reach the LLM."
+  },
+  {
+    "claim_id": "CLM1003",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "route_to_senior_reviewer",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "claimed_amount"
+      ]
+    },
+    "notes": "Multi-condition collision, deliberate: Z00.00 (routine exam) billed against APPENDECTOMY trips the coding-mismatch override AND claimed_amount=7800 trips the high-amount override. Priority order is inactive > high_amount > mismatch > missing_docs, so high_amount wins and this resolves to route_to_senior_reviewer, not coding review. The mismatch is not discarded: it must still appear in the response's validator_notes as also_triggered_mismatch (design_report.md 3.1). This is the priority-collision test case EVALUATION.md 1.1 previously flagged as missing."
+  },
+  {
+    "claim_id": "CLM1004",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "route_to_senior_reviewer",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "claimed_amount"
+      ]
+    },
+    "notes": "Multi-condition collision, deliberate: preapproval with zero supporting documents (missing_docs) AND claimed_amount=12000 (high_amount). Priority order is inactive > high_amount > mismatch > missing_docs, so high_amount wins and this resolves to route_to_senior_reviewer, not a documentation request. validator_notes must still show also_triggered_missing_docs."
+  },
+  {
+    "claim_id": "CLM1005",
+    "difficulty": "easy",
+    "path": "llm",
+    "gold_action": "approve_claim_payment",
+    "gold_payment": 85,
+    "required_evidence": {
+      "sections": [
+        "1",
+        "3.1"
+      ],
+      "claim_fields": [
+        "member_status"
+      ]
+    },
+    "notes": "Regression-guard case: an earlier retrieval bug caused the agent to misapply the PA-only \u00a73.2 documentation rule to this non-PA standard claim. Fixed by giving the LLM the full document (see retrieval.py). Keep this in the golden set to catch that regression again."
+  },
+  {
+    "claim_id": "CLM1006",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "approve_claim_payment",
+    "gold_payment": 900,
+    "acceptable_alternate_actions": [
+      "route_to_senior_reviewer"
+    ],
+    "required_evidence": {
+      "sections": [
+        "5.1"
+      ],
+      "claim_fields": [
+        "prior_denial_reason",
+        "supporting_documents"
+      ]
+    },
+    "notes": "Genuinely ambiguous, included on purpose -- observed flipping between approve_claim_payment and route_to_senior_reviewer across separate live runs of the SAME claim. Primary gold favors approve (policy \u00a75.1's overturn criteria are met: new clinical_note submitted, qualifying diagnosis F32.9 present), but escalating for human sign-off on an appeal reversal is a defensible alternate. This case exists specifically to measure run-to-run consistency (see harness.py --repeat), not just single-shot accuracy."
+  },
+  {
+    "claim_id": "CLM1008",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "route_to_senior_reviewer",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "claimed_amount"
+      ]
+    },
+    "notes": "claimed_amount > 5000 -- hard override, deterministic, no recommendation attached by design."
+  },
+  {
+    "claim_id": "CLM1009",
+    "difficulty": "easy",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [
+        "5.2"
+      ],
+      "claim_fields": [
+        "prior_denial_reason",
+        "supporting_documents"
+      ]
+    },
+    "notes": "Appeal with only an appeal_letter, no new clinical documentation -- BCBS \u00a75.2 explicitly says that doesn't meet the bar to overturn."
+  },
+  {
+    "claim_id": "CLM2001",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [
+        "5.2"
+      ],
+      "claim_fields": [
+        "provider_notes"
+      ]
+    },
+    "notes": "Added for coverage: diagnosis/procedure codes are consistent per coding_reference.py's simple prefix table, so the deterministic mismatch check CANNOT catch this -- only reading \u00a75.2's preventive-screening exclusion against provider_notes ('asymptomatic', 'routine annual screening') catches it. Tests genuine policy-language reasoning, not code-matching."
+  },
+  {
+    "claim_id": "CLM2002",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "acceptable_alternate_actions": [
+      "route_to_senior_reviewer"
+    ],
+    "required_evidence": {
+      "sections": [
+        "4",
+        "5.1"
+      ],
+      "claim_fields": [
+        "provider_notes"
+      ],
+      "snippets": {
+        "4": "Not primarily for convenience of the member or provider",
+        "5.1": "Conservative treatment has been attempted"
+      }
+    },
+    "notes": "Added for coverage: diagnosis is covered, documentation is complete, deterministic checks all pass -- the only signal is provider_notes stating the request is for member convenience ('prior to upcoming travel', 'no new symptoms'), which \u00a74's Medical Necessity Standard explicitly excludes ('not primarily for convenience'). Tests whether the agent applies necessity language beyond a documentation checklist. Snippets copied verbatim from agent/policies_source/united_healthcare.txt (\u00a74 and \u00a75.1) as the curated ground-truth quote each cited section's excerpt should overlap with, not just the section id being cited (eval/harness.py snippet_fidelity)."
+  },
+  {
+    "claim_id": "CLM3001",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "member_status"
+      ]
+    },
+    "notes": "Multi-condition collision, deliberate: inactive member AND coding mismatch (Z00.00 vs APPENDECTOMY). Priority order (inactive > high_amount > mismatch > missing_docs) means inactive wins; validator_notes must still show also_triggered_mismatch. Closes part of the priority-collision matrix EVALUATION.md 1.1 flagged (any condition colliding with inactive was previously untested)."
+  },
+  {
+    "claim_id": "CLM3002",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "member_status"
+      ]
+    },
+    "notes": "Multi-condition collision: inactive member AND zero supporting documents on a preapproval claim. Inactive wins; validator_notes must show also_triggered_missing_docs."
+  },
+  {
+    "claim_id": "CLM3003",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "member_status"
+      ]
+    },
+    "notes": "Multi-condition collision: inactive member AND claimed_amount=6200 (over threshold). Inactive wins even over the amount override; validator_notes must show also_triggered_high_amount. Verifies inactive genuinely outranks every other condition, not just the ones it was originally tested against."
+  },
+  {
+    "claim_id": "CLM3004",
+    "difficulty": "easy",
+    "path": "override",
+    "gold_action": "route_to_senior_reviewer",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": [
+        "diagnosis_code",
+        "procedure_code",
+        "supporting_documents"
+      ]
+    },
+    "notes": "Multi-condition collision: active member, coding mismatch (Z00.00 vs MRI-LS-SPINE) AND zero supporting documents on a preapproval claim. Under the current design (agent/graph.py check_overrides), two or more of {high_amount, mismatch, missing_docs} firing together no longer ranks to a single winner -- it escalates outright to route_to_senior_reviewer via multi_override_review, still without an LLM call. validator_notes shows also_triggered_mismatch and also_triggered_missing_docs. Verified against a real harness run 2026-09-09 after that design change; this label previously read route_to_coding_review under the superseded priority-ranking design. This was the last untested pair in the collision matrix (EVALUATION.md 1.1) -- all six pairs are now covered across CLM1003/CLM1004/CLM3001-3004."
+  },
+  {
+    "claim_id": "CLM3005",
+    "difficulty": "easy",
+    "path": "error",
+    "gold_action": "route_to_senior_reviewer",
+    "required_evidence": {
+      "sections": [],
+      "claim_fields": []
+    },
+    "notes": "Unknown insurer (insurance_provider='Cigna', not in retrieval.INSURER_TO_SLUG). Passes all four deterministic overrides, then retrieval.insurer_slug() raises ValueError, fail-closed rather than falling back to a default policy. Verified: agent/run.py already caught this and escalated correctly; eval/harness.py did not (no try/except around app.invoke()) until this case surfaced the gap -- both now go through the shared validator.pipeline_error_response() so the schema matches every other path. validator_notes = ['agent_pipeline_error']."
+  },
+  {
+    "claim_id": "CLM3006",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [
+        "5.1"
+      ],
+      "claim_fields": [
+        "provider_notes"
+      ]
+    },
+    "notes": "Built to test genuinely contradictory evidence (prior_treatment_history is present in supporting_documents, but provider_notes explicitly states no conservative treatment was attempted) and verified NOT to produce escalation: the agent consistently resolves this by treating provider_notes' content as authoritative over the document's mere presence, and denies. That's a real, reproducible, defensible behavior worth keeping as a regression test (content beats presence-flag), but it means this case does NOT close the 'genuinely irresolvable contradictory evidence' gap EVALUATION.md 1.1 still flags as open -- that gap remains unclosed; do not conflate the two."
+  },
+  {
+    "claim_id": "CLM3007",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "required_evidence": {
+      "sections": [
+        "5.2"
+      ],
+      "claim_fields": [
+        "prior_denial_reason",
+        "provider_notes"
+      ]
+    },
+    "notes": "Same pattern as CLM3006 on an appeal: a new clinical_note is present in supporting_documents, but provider_notes describes its actual content as identical to the original denied encounter, not new or qualifying. Verified: the agent upholds the denial, again trusting the narrative's description of content over the document's presence. Same caveat as CLM3006 -- this is not the untested 'irresolvable contradiction' case."
+  },
+  {
+    "claim_id": "CLM3008",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "approve_claim_payment",
+    "gold_payment": 95,
+    "required_evidence": {
+      "sections": [
+        "1"
+      ],
+      "claim_fields": [
+        "diagnosis_code"
+      ]
+    },
+    "notes": "Genuinely vague provider_notes ('some signs of possible infection; treatment course adjusted per clinical judgment') on an otherwise clean, low-dollar, code-consistent standard claim. Verified: the agent approves rather than escalating or denying -- it does not over-react to mild narrative vagueness when the deterministic facts (active member, consistent codes, low amount) are all clean and no specific documented policy criterion is left unmet. Contrast with CLM3009, where the vague language directly bears on an explicit, named policy requirement (Aetna \u00a75.1's functional-impairment/frequency documentation) and the dominant outcome is a denial, not an approval -- the agent's reaction to ambiguity tracks whether the ambiguous language actually undermines a specific criterion, not just the presence of a vague word."
+  },
+  {
+    "claim_id": "CLM3009",
+    "difficulty": "hard",
+    "path": "llm",
+    "gold_action": "deny_claim",
+    "acceptable_alternate_actions": [
+      "route_to_senior_reviewer"
+    ],
+    "required_evidence": {
+      "sections": [
+        "5.1"
+      ],
+      "claim_fields": [
+        "provider_notes"
+      ]
+    },
+    "notes": "Genuinely ambiguous provider_notes on an appeal, distinct from CLM1001's missing-document ambiguity: symptoms described as 'variable' and functional impact as 'depends on the week', vague against Aetna \u00a75.1's specific requirement for documented symptoms, functional impairment, and a stated treatment frequency. Checked with --repeat 4 after an initial single run returned route_to_senior_reviewer: the repeat came back deny_claim 4/4 (confidence 0.62-0.68), so across 5 total observations the dominant, reproducible behavior is deny_claim (uphold denial) -- the agent resolves this ambiguity against the appellant rather than escalating, with escalation as a real but minority variant. This is the closest thing in the golden set to a dedicated ambiguous-provider_notes test case, closing part of the gap EVALUATION.md 1.1 flagged, but the gold label reflects what --repeat actually showed, not the first single run seen."
+  }
+]
